@@ -54,6 +54,8 @@ void setup() {
   surface.setSize(640, 480);
   
   sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
+  sound = new SoundFile(this, "Ludovico Einaudi - Ancora.mp3");
+  sound = new SoundFile(this, "nothing's gonna change my love for you trumpet solo.mp3");
   sound = new SoundFile(this, "");
 }
 
@@ -137,9 +139,9 @@ void SelectAndPlaySong(float i){
      sound.loop();
    } else if(i == 5){
      //Trumpet.
-     sound = new SoundFile(this, "");
+     sound = new SoundFile(this, "nothing's gonna change my love for you trumpet solo.mp3");
      sound.amp(0.1);
-     println("Playing soundfile: ''");
+     println("Playing soundfile: 'Nothing's gonna change my love for you trumpet solo'");
      sound.loop();
    }
 }

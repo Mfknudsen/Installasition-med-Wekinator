@@ -99,6 +99,12 @@ void draw() {
   img.resize(640, 480);
   image(img, 0,0);
   
+  fill(0);
+  rect(0,450,640,50);
+  fill(255);
+  textAlign(CENTER);
+  text("Vis et instrument og hør musik!",640/2,470);
+  
   if(a != b){
     SelectAndPlaySong(a);
     b = a;

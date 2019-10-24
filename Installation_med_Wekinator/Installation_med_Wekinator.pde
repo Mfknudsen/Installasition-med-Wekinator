@@ -115,7 +115,7 @@ void SelectAndPlaySong(float i){
      //Guitar.
      sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
      sound.amp(0.1);
-     println("Playing soundfile: 'Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3'");
+     println("Playing soundfile: 'Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover'");
      sound.loop();
    } else if(i == 3){
      //Trummer.
@@ -125,9 +125,9 @@ void SelectAndPlaySong(float i){
      sound.loop();
    } else if(i == 4){
      //Piano.
-     sound = new SoundFile(this, "");
+     sound = new SoundFile(this, "Ludovico Einaudi - Ancora.mp3");
      sound.amp(0.1);
-     println("Playing soundfile: ''");
+     println("Playing soundfile: 'Ludovico Einaudi - Ancora'");
      sound.loop();
    } else if(i == 5){
      //Trumpet.

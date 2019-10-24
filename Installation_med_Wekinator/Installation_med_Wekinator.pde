@@ -7,8 +7,8 @@ int numPixelsOrig;
 int numPixels;
 boolean first = true;
 
-int boxWidth = 64;
-int boxHeight = 48;
+int boxWidth = 64/2;
+int boxHeight = 48/2;
 
 int numHoriz = 640/boxWidth;
 int numVert = 480/boxHeight;
@@ -47,7 +47,7 @@ void setup() {
   oscP5 = new OscP5(this,12000);
   dest = new NetAddress("127.0.0.1",6448);
   
-  frame.setSize(640, 480);
+  surface.setSize(640, 480);
 }
 
 void draw() {
@@ -85,37 +85,33 @@ void draw() {
   }
   if(frameCount % 2 == 0)
     sendOsc(downPix);
-
   }
-  first = false;
-  fill(0);
-  text("Sending 100 inputs to port 6448 using message /wek/inputs", 10, 10);
+  surface.setSize(640, 480);
+
+  PImage img = video.get();
+  img.resize(640, 480);
+  image(img, 0,0);
 }
 
-float diff(int p, int off) {
-  if(p + off < 0 || p + off >= numPixels)
-    return 0;
-  return red(video.pixels[p+off]) - red(video.pixels[p]) +
-         green(video.pixels[p+off]) - green(video.pixels[p]) +
-         blue(video.pixels[p+off]) - blue(video.pixels[p]);
-}
-
-void SelectAndPlaySong(int i){
-  sound.stop();
+void SelectAndPlaySong(float i){
+   sound.stop();
   
    if(i == 1){
-      sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover");
+      //No file or sound is played.
    } else if(i == 2){
-      sound = new SoundFile(this, "FILE");
+      sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
+      println("Playing soundfile: 'Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3'");
+      sound.loop();
    } else if(i == 3){
-      sound = new SoundFile(this, "FILE");
+      sound = new SoundFile(this, "");
+      sound.loop();
    } else if(i == 4){
-      sound = new SoundFile(this, "FILE");
-   } else if(i == 5){
-      sound = new SoundFile(this, "FILE");
+      sound = new SoundFile(this, "");
+      sound.loop();
+ } else if(i == 5){
+      sound = new SoundFile(this, "");
+      sound.loop();
    }
-   println(i);
-   sound.loop();
 }
 
 void sendOsc(int[] px) {
@@ -123,12 +119,14 @@ void sendOsc(int[] px) {
  // msg.add(px);
    for (int i = 0; i < px.length; i++) {
       msg.add(float(px[i])); 
+      println(px[i]);
    }
   oscP5.send(msg, dest);
 }
 
 void oscEvent(OscMessage theOscMessage){
   if(theOscMessage.checkAddrPattern("/wek/outputs")){
-    SelectAndPlaySong(int(theOscMessage.get(0).floatValue()));
+    float a = theOscMessage.get(0).floatValue();
+    SelectAndPlaySong(a);
 }
 }

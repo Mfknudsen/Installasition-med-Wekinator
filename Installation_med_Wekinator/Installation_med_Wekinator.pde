@@ -23,8 +23,8 @@ OscP5 oscP5;
 NetAddress dest;
 
 
-float a = 0;
-float b = a;
+float SongNumber  = 0;
+float CurrentSong = SongNumber ;
 
 void setup() {
   String[] cameras = Capture.list();
@@ -47,12 +47,14 @@ void setup() {
     noStroke();
   }
   
-  /* start oscP5, listening for incoming messages at port 12000 */
+  //Begynder at lytte til port 12000 og gør klar til at sende til port 6448.
   oscP5 = new OscP5(this,12000);
   dest = new NetAddress("127.0.0.1",6448);
   
+  //Sætter størrelsen på sketcen.
   surface.setSize(640, 480);
   
+  //Loader alle sangende der kan blive spillet.
   sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
   sound = new SoundFile(this, "Ludovico Einaudi - Ancora.mp3");
   sound = new SoundFile(this, "nothing's gonna change my love for you trumpet solo.mp3");
@@ -60,7 +62,7 @@ void setup() {
 }
 
 void draw() {
-  
+  //----------------------------Kode fra Kadenze--------------------------\\
   if (video.available() == true) {
     video.read();
     
@@ -95,68 +97,77 @@ void draw() {
   if(frameCount % 2 == 0)
     sendOsc(downPix);
   }
-  surface.setSize(640, 480);
-
+  //----------------------------------------------------------------------------\\
+  
   PImage img = video.get();
-  img.resize(640, 480);
+  img.resize(-640, 480);
   image(img, 0,0);
   
+  //Opretter en tekstboks til information for brugeren.
   fill(0);
   rect(0,450,640,50);
   fill(255);
   textAlign(CENTER);
   text("Vis et instrument og hør musik!",640/2,470);
   
-  if(a != b){
-    SelectAndPlaySong(a);
-    b = a;
+  //Sikre at den ikke konstant vil sætte den samme sang på igen og igen, men i stedet kun vil starte en sang, hvis en ny skal sættes på.
+  if(SongNumber  != CurrentSong){
+    SelectAndPlaySong(SongNumber);
+    CurrentSong = SongNumber ;
   }
 }
 
+//Opretter en funktion, som skal skiftet til et andet instrument og derved en anden sang.
 void SelectAndPlaySong(float i){
+  //Hvis en sang er i gang med blive spillet, vil den blive stoppet.
   if(sound.isPlaying()){
-   sound.stop();
+    //Stopper sangen.
+    sound.stop();
   }
+  
+  //Hvis funktionen får forskellige input, vil forskellige sange blive spillet.
    if(i == 1){
-      //No file or sound is played.
+      //Ingen sang vil blive spillet.
    } else if(i == 2){
      //Guitar.
+     //En guitar solo vil blive spillet.
      sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
      sound.amp(0.1);
      println("Playing soundfile: 'Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover'");
      sound.loop();
    } else if(i == 3){
-     //Trummer.
-     sound = new SoundFile(this, "");
-     sound.amp(0.1);
-     println("Playing soundfile: ''");
-     sound.loop();
-   } else if(i == 4){
      //Piano.
+     //En klaver solo vil blive spillet.
      sound = new SoundFile(this, "Ludovico Einaudi - Ancora.mp3");
-     sound.amp(0.1);
+     sound.amp(0.3);
      println("Playing soundfile: 'Ludovico Einaudi - Ancora'");
      sound.loop();
-   } else if(i == 5){
+   } else if(i == 4){
      //Trumpet.
+     //En trumpet solo vil blive spillet.
      sound = new SoundFile(this, "nothing's gonna change my love for you trumpet solo.mp3");
-     sound.amp(0.1);
+     sound.amp(0.3);
      println("Playing soundfile: 'Nothing's gonna change my love for you trumpet solo'");
      sound.loop();
    }
 }
 
+//Sender input til Wekinator via osc.
 void sendOsc(int[] px) {
   OscMessage msg = new OscMessage("/wek/inputs");
- // msg.add(px);
    for (int i = 0; i < px.length; i++) {
-      msg.add(float(px[i])); 
+     //Gemmer alle værdierne, som skal sendes til Wekinator.
+     msg.add(float(px[i])); 
    }
+  //Sender input til Wekinator.
   oscP5.send(msg, dest);
 }
 
+//Modtager Wekinators output.
 void oscEvent(OscMessage theOscMessage){
+  //Tjekker om det kommer fra Wekinator.
   if(theOscMessage.checkAddrPattern("/wek/outputs")){
-    a = theOscMessage.get(0).floatValue();
+    //Får hvilken sang der skal spilles fra Wekinator.
+    SongNumber = theOscMessage.get(0).floatValue();
 }
 }

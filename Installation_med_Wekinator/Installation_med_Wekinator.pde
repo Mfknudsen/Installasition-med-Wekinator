@@ -104,7 +104,7 @@ void SelectAndPlaySong(int i){
   sound.stop();
   
    if(i == 1){
-      sound = new SoundFile(this, "FILE");
+      sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover");
    } else if(i == 2){
       sound = new SoundFile(this, "FILE");
    } else if(i == 3){

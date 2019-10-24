@@ -22,6 +22,10 @@ SoundFile sound;
 OscP5 oscP5;
 NetAddress dest;
 
+
+float a = 0;
+float b = a;
+
 void setup() {
   String[] cameras = Capture.list();
 
@@ -48,6 +52,8 @@ void setup() {
   dest = new NetAddress("127.0.0.1",6448);
   
   surface.setSize(640, 480);
+  
+  sound = new SoundFile(this, "");
 }
 
 void draw() {
@@ -91,26 +97,34 @@ void draw() {
   PImage img = video.get();
   img.resize(640, 480);
   image(img, 0,0);
+  
+  if(a != b){
+    SelectAndPlaySong(a);
+    a = b;
+  }
 }
 
 void SelectAndPlaySong(float i){
+  if(sound.isPlaying()){
    sound.stop();
-  
+  }
    if(i == 1){
       //No file or sound is played.
    } else if(i == 2){
-      sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
-      println("Playing soundfile: 'Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3'");
-      sound.loop();
+     //Guitar.
+     sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
+     sound.amp(0.5);
+     println("Playing soundfile: 'Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3'");
+     sound.loop();
    } else if(i == 3){
-      sound = new SoundFile(this, "");
-      sound.loop();
+     sound = new SoundFile(this, "");
+     sound.loop();
    } else if(i == 4){
-      sound = new SoundFile(this, "");
-      sound.loop();
+     sound = new SoundFile(this, "");
+     sound.loop();
  } else if(i == 5){
-      sound = new SoundFile(this, "");
-      sound.loop();
+     sound = new SoundFile(this, "");
+     sound.loop();
    }
 }
 
@@ -119,14 +133,12 @@ void sendOsc(int[] px) {
  // msg.add(px);
    for (int i = 0; i < px.length; i++) {
       msg.add(float(px[i])); 
-      println(px[i]);
    }
   oscP5.send(msg, dest);
 }
 
 void oscEvent(OscMessage theOscMessage){
   if(theOscMessage.checkAddrPattern("/wek/outputs")){
-    float a = theOscMessage.get(0).floatValue();
-    SelectAndPlaySong(a);
+    a = theOscMessage.get(0).floatValue();
 }
 }

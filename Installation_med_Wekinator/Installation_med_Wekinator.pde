@@ -53,6 +53,7 @@ void setup() {
   
   surface.setSize(640, 480);
   
+  sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
   sound = new SoundFile(this, "");
 }
 
@@ -100,7 +101,7 @@ void draw() {
   
   if(a != b){
     SelectAndPlaySong(a);
-    a = b;
+    b = a;
   }
 }
 
@@ -113,17 +114,26 @@ void SelectAndPlaySong(float i){
    } else if(i == 2){
      //Guitar.
      sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
-     sound.amp(0.5);
+     sound.amp(0.1);
      println("Playing soundfile: 'Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3'");
      sound.loop();
    } else if(i == 3){
+     //Trummer.
      sound = new SoundFile(this, "");
+     sound.amp(0.1);
+     println("Playing soundfile: ''");
      sound.loop();
    } else if(i == 4){
+     //Piano.
      sound = new SoundFile(this, "");
+     sound.amp(0.1);
+     println("Playing soundfile: ''");
      sound.loop();
- } else if(i == 5){
+   } else if(i == 5){
+     //Trumpet.
      sound = new SoundFile(this, "");
+     sound.amp(0.1);
+     println("Playing soundfile: ''");
      sound.loop();
    }
 }

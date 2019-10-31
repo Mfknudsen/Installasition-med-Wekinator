@@ -23,8 +23,8 @@ OscP5 oscP5;
 NetAddress dest;
 
 
-float SongNumber  = 0;
-float CurrentSong = SongNumber ;
+float SongNumber  = 1;
+float CurrentSong = SongNumber;
 
 void setup() {
   String[] cameras = Capture.list();
@@ -58,7 +58,7 @@ void setup() {
   sound = new SoundFile(this, "Hotel-California-Solo-The-Eagles-Acoustic-Guitar-Cover.mp3");
   sound = new SoundFile(this, "Ludovico Einaudi - Ancora.mp3");
   sound = new SoundFile(this, "nothing's gonna change my love for you trumpet solo.mp3");
-  sound = new SoundFile(this, "");
+  println("Songs have been loaded.");
 }
 
 void draw() {
@@ -99,10 +99,10 @@ void draw() {
   }
   //----------------------------------------------------------------------------\\
   
-  PImage img = video.get();
+  /*PImage img = video.get();
   img.resize(-640, 480);
   image(img, 0,0);
-  
+  */
   //Opretter en tekstboks til information for brugeren.
   fill(0);
   rect(0,450,640,50);
@@ -113,7 +113,7 @@ void draw() {
   //Sikre at den ikke konstant vil sætte den samme sang på igen og igen, men i stedet kun vil starte en sang, hvis en ny skal sættes på.
   if(SongNumber  != CurrentSong){
     SelectAndPlaySong(SongNumber);
-    CurrentSong = SongNumber ;
+    CurrentSong = SongNumber;
   }
 }
 
@@ -154,6 +154,7 @@ void SelectAndPlaySong(float i){
 
 //Sender input til Wekinator via osc.
 void sendOsc(int[] px) {
+  println(px.length);
   OscMessage msg = new OscMessage("/wek/inputs");
    for (int i = 0; i < px.length; i++) {
      //Gemmer alle værdierne, som skal sendes til Wekinator.

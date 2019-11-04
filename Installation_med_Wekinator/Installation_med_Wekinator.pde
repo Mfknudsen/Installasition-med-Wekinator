@@ -154,7 +154,6 @@ void SelectAndPlaySong(float i){
 
 //Sender input til Wekinator via osc.
 void sendOsc(int[] px) {
-  println(px.length);
   OscMessage msg = new OscMessage("/wek/inputs");
    for (int i = 0; i < px.length; i++) {
      //Gemmer alle værdierne, som skal sendes til Wekinator.
